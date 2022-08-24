@@ -40,14 +40,12 @@ public class MessageController {
 
     @PostMapping("/api/access")
     public String access(@RequestBody String action){
-
         LOGGER.info(action);
         return "success";
     }
+    @GetMapping(value = "/getOpenId")
     public String getOpenId(String code){
-
         ResponseEntity<String> entity = restTemplate.getForEntity("https://api.weixin.qq.com/sns/jscode2session?appid="+appid+"&secret="+secret+"&js_code=" + code + "&grant_type=authorization_code", String.class);
-
         String body = entity.getBody();
         JSONObject jsonObject = JSONObject.parseObject(body);
         LOGGER.info("获取的openid响应"+body);
@@ -56,6 +54,7 @@ public class MessageController {
         return openid;
     }
 
+    @GetMapping(value = "/getToken")
     public String getAccessToken(){
         Map<String,Object> params = new HashMap<>();
         params.put("grant_type","client_credential");
@@ -65,8 +64,6 @@ public class MessageController {
         ResponseEntity<String> responseEntity = restTemplate.getForEntity("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={appid}&secret={secret}", String.class, params);
         String result = responseEntity.getBody();
         LOGGER.info("请求结果"+result);
-
-
         JSONObject object = JSONObject.parseObject(result);
         String access_token = object.getString("access_token");
         String expires_in = object.getString("expires_in");
@@ -76,7 +73,8 @@ public class MessageController {
     }
 
 
-    public String pushMessage(String openid){
+    @GetMapping("/sendMessage/{openid}")
+    public String pushMessage(@PathVariable(value = "openid") String openid){
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
         String time = now.format(dateTimeFormatter);
