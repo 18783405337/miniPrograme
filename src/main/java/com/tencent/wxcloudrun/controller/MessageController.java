@@ -32,8 +32,8 @@ public class MessageController {
     @Resource
     private RestTemplate restTemplate;
 
-    @GetMapping("/sendMessage/{code}")
-    private String sendMessage(@PathVariable(value = "code") String code){
+    @GetMapping("/sendMessage")
+    private String sendMessage( String code){
         String openId = getOpenId(code);
         return pushMessage(openId);
     }
@@ -44,7 +44,7 @@ public class MessageController {
         return "success";
     }
     @GetMapping(value = "/getOpenId")
-    public String getOpenId(String code){
+    public String getOpenId( String code){
         ResponseEntity<String> entity = restTemplate.getForEntity("https://api.weixin.qq.com/sns/jscode2session?appid="+appid+"&secret="+secret+"&js_code=" + code + "&grant_type=authorization_code", String.class);
         String body = entity.getBody();
         JSONObject jsonObject = JSONObject.parseObject(body);
@@ -73,8 +73,8 @@ public class MessageController {
     }
 
 
-    @GetMapping("/pushMessage/{openid}")
-    public String pushMessage(@PathVariable(value = "openid") String openid){
+    @GetMapping("/pushMessage")
+    public String pushMessage(String openid){
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
         String time = now.format(dateTimeFormatter);
