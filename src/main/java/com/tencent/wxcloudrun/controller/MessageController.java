@@ -38,6 +38,12 @@ public class MessageController {
         return pushMessage(openId);
     }
 
+    @PostMapping("/api/access")
+    public String access(@RequestBody String action){
+
+        LOGGER.info(action);
+        return "success";
+    }
     public String getOpenId(String code){
 
         ResponseEntity<String> entity = restTemplate.getForEntity("https://api.weixin.qq.com/sns/jscode2session?appid="+appid+"&secret="+secret+"&js_code=" + code + "&grant_type=authorization_code", String.class);
