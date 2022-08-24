@@ -73,7 +73,7 @@ public class MessageController {
     }
 
 
-    @GetMapping("/sendMessage/{openid}")
+    @GetMapping("/pushMessage/{openid}")
     public String pushMessage(@PathVariable(value = "openid") String openid){
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
